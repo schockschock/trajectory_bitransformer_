@@ -1,1 +1,3 @@
-# trajectory_bitransformer_
+# trajectory*bitransformer*
+
+This repo contains our different approaches
