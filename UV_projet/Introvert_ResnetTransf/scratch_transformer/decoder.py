@@ -46,6 +46,7 @@ class TransformerDecoder(nn.Module):
     def __init__(self, target_size, embed_dim, seq_len, mask=None,num_layers=2, expansion_factor=4, n_heads=8) -> None:
         super(TransformerDecoder, self).__init__()
         self.fc_embedding = nn.Linear(2,embed_dim)
+        self.relu = nn.ReLU(inplace=False)
         #self.embedding = Embedding(embed_dim, target_size)
         self.dropout = nn.Dropout(0.1)
         self.positional_encoding = PositionalEncoding(embed_dim, self.dropout)
@@ -63,6 +64,7 @@ class TransformerDecoder(nn.Module):
     def forward(self, x, enc_out, mask):
 
         x = self.fc_embedding(x)
+        #x = self.relu(x)
         #x = self.embedding(x)
         
         x = self.positional_encoding(x)

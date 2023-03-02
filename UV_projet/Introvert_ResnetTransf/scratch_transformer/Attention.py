@@ -53,10 +53,9 @@ class MultiHeadAttention(nn.Module):
         
         #compute attention
         # adjust key for matrix multiplication
-#         print(f"k size : {k.size()}")
-#         print(f"q size : {q.size()}")
+
         k_adjusted = k.transpose(-1,-2) #(batch_size, n_heads, single_head_dim, seq_ken)  #(32 x 8 x 64 x 8)
-#         print(f"k_adjusted size : {k_adjusted.size()}")
+
         product = torch.matmul(q, k_adjusted) #(32 x 8 x 8 x 64) x (32 x 8 x 64 x 8) = #(32x8x8x8)
 
         # fill those positions of product matrix as (-1e20) where mask positions are 0
@@ -72,7 +71,7 @@ class MultiHeadAttention(nn.Module):
         scores = torch.matmul(product, v)
         scores = F.softmax(scores, dim=-1) ##(32x8x 8x 10) x (32 x 8 x 8 x 64) = (32 x 8 x 8 x 64)
 #         print(f"seq_length_query : {seq_length_query}")
-        print(scores.transpose(1,2).size())
+        
         #concatenate the output
         concat = scores.transpose(1,2).contiguous().view(batch_size, seq_length_query, self.single_head_dim*self.n_heads) # (32x8x8x64) -> (32x8x8x64)  -> (32,8,512)
         output = self.out(concat) #(32,8,512)
