@@ -17,7 +17,7 @@ class CrossAttention(nn.Module):
     def forward(self, src, obd_spd, src_mask, obd_enc_mask):
         """perform the cross_attention and return two input"""
         embed_spd = self.enc_extra_embed(obd_spd.permute(0, 2, 1))
-        code, mix = self.encode(src, embed_spd, src_mask, obd_enc_mask)
+        code, mix = self.encode(self.src_embed(src), embed_spd, src_mask, obd_enc_mask)
         return self.out(code+mix)
 
     def encode(self, src, embed_spd, src_mask, obd_enc_mask):
