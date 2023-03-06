@@ -4,8 +4,8 @@ import torch
 import numpy as np
 import pandas as pd
 import math
-from Attention import MultiHeadAttention
-from components import Embedding, PositionalEncoding
+from .Attention import MultiHeadAttention
+from .components import Embedding, PositionalEncoding
 
 
 class TransformerBlock(nn.Module):

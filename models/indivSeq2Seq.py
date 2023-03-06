@@ -1,8 +1,8 @@
 import torch
 import torch.nn as nn
-from encoders.trajectory_encoder import EncoderTransformer
-from encoders.resnet_encoder import _GestureTransformer
-from scratch_transformer.decoder import TransformerDecoder
+from .encoders.trajectory_encoder import EncoderTransformer
+from .encoders.resnet_encoder import _GestureTransformer
+from .scratch_transformer.decoder import TransformerDecoder
 
 
 def init_weights(m):
@@ -11,7 +11,7 @@ def init_weights(m):
 
 
 class Seq2Seq(nn.Module):
-    def __init__(self, device, code_size, target_size, dropout=0.1, batch_size=32) -> None:
+    def __init__(self, device, code_size, target_size, dropout=0.1) -> None:
         super(Seq2Seq, self).__init__()
 
         # encoder of the coordinates
@@ -33,7 +33,7 @@ class Seq2Seq(nn.Module):
         self.pooling = nn.AdaptiveAvgPool1d((code_size))
 
         self.code_pooling = nn.AdaptiveAvgPool2d(
-            (target_size, embed_dim))  # ??
+            (target_size, embed_dim))  # ?
 
     def make_trg_mask(self, trg):
         """

@@ -1,9 +1,9 @@
 import torch.nn as nn
 import torch.nn.functional as F
 import torch
-from encoder import TransformerBlock
-from Attention import MultiHeadAttention
-from components import Embedding, PositionalEncoding
+from .encoder import TransformerBlock
+from .Attention import MultiHeadAttention
+from .components import Embedding, PositionalEncoding
 
 
 def make_trg_mask(trg):
