@@ -14,13 +14,12 @@ This is the code of our approach for trajectory prediction using transformer. Ou
 The dataset should be in the /data folder and have the following structure
 
     - data
-      - Introvert_resnetTransf
-        - data_trajpred
-            - datasetname
-                - visual_data
-                - pos_data_train.db
-                - pos_data_val.db
-                - pos_data.db
+      - data_trajpred
+        - datasetname
+            - visual_data
+            - pos_data_train.db
+            - pos_data_val.db
+            - pos_data.db
 
 ## Usage
 
