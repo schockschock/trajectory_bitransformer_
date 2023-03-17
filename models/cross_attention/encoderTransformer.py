@@ -47,6 +47,6 @@ class EncoderTransformer(nn.Module):
             out_enc_coords, out_enc_features = layer(
                 in_encoder_coords, in_encoder_features)
 
-        code = (out_enc_coords+out_enc_features).to(device).double()
+        code = (out_enc_coords+out_enc_features).double()
 
         return code
