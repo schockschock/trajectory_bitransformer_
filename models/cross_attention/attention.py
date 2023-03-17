@@ -1,5 +1,6 @@
 import torch.nn as nn
 import torch
+import numpy as np
 
 class ScaledDotProductAttention(nn.Module):
     def __init__(self, d_model, d_k, d_v, h):

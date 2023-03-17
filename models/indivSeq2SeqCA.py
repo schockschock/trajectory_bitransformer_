@@ -13,6 +13,8 @@ class Seq2SeqCA(nn.Module):
 
     def __init__(self, device, embed_size, code_size=512, target_size=12, dropout_val=0.2, batch_size=1, conv_model=Resnet()):
         super(Seq2SeqCA, self).__init__()
+        
+        self.device = device
 
         self.feature_size = 512
         torch.cuda.empty_cache()
@@ -35,11 +37,11 @@ class Seq2SeqCA(nn.Module):
             self.encoder.cuda()
             self.decoder.cuda()
 
-    def forward(self, input_tensor, target_tensor, features):
+    def forward(self, input_tensor, target_tensor, visual_input_tensor):
         batch_size = int(input_tensor.size(0))
 
         # Les features ont été introduites directement dans le dataset
-        #features = self.features_ex(visual_input_tensor)
+        features = self.features_ex(visual_input_tensor)
 
         features = features.view((batch_size, 8, -1))  # (bs, 8, 512)
 
@@ -67,3 +69,19 @@ class Seq2SeqCA(nn.Module):
         decoder_output = self.decoder(target_tensor, code_seq_12, trg_mask)
 
         return decoder_output
+    
+    def make_trg_mask(self, trg):
+        """
+        Args:
+            trg: target sequence
+        Returns:
+            trg_mask: target mask
+        """
+        batch_size = trg.shape[0]
+        trg_len = 12
+        #batch_size, trg_len = trg.shape
+        # returns the lower triangular part of matrix filled with ones
+        trg_mask = torch.tril(torch.ones((trg_len, trg_len))).expand(
+            batch_size, 1, trg_len, trg_len
+        )
+        return trg_mask.to(self.device)

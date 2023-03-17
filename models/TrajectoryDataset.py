@@ -21,7 +21,7 @@ table = "dataset_T_length_20delta_coordinates"
 class TrajectoryPredictionDataset(torch.utils.data.Dataset):
     # Enc.cinématique reçoit la trajectoire observée de humain cible (input) de la forme T=(u1,u2-u1,u3-u2,..) qui consiste en les coordonnées de la position de départ et en les déplacements relatifs de l'humain entre les images consécutives.
     # Ce format a été choisi car il permet au modèle de mieux capturer les similarités entre des trajectoires presque identiques qui peuvent avoir des points de départ différents.
-    def __init__(self, ROOT_DIR, cnx, conv_model=None, load_features=None, return_image=False):
+    def __init__(self, ROOT_DIR, cnx, conv_model = None, load_features = None, return_image = False):
 
         self.return_image = return_image
         self.pos_df = pd.read_sql_query("SELECT * FROM "+str(table), cnx)
@@ -35,31 +35,34 @@ class TrajectoryPredictionDataset(torch.utils.data.Dataset):
             self.visual_data.append(self.transform(
                 Image.open(os.path.join(self.root_dir)+"/"+img)))
         self.visual_data = torch.stack(self.visual_data)
-
+        
+        
         self.return_features = False
+        
         if conv_model:
             self.return_features = True
-            self.feature_extractor = features_extraction(
-                conv_model, in_planes=3)
+            self.feature_extractor = features_extraction(conv_model, in_planes=3)
             if load_features:
                 print("Loading features from file")
                 self.features = np.load(load_features)
                 self.features = torch.from_numpy(self.features)
-            else:
+            else :
                 self.features = self.extract_features(self.feature_extractor)
             print(self.features.size())
-
-    def extract_features(self, features_extractor):
+            
+            
+    def extract_features(self,features_extractor):
         print("Extracting features of all dataset")
-        features = np.zeros((len(self.visual_data), 8, 512, 1, 1))
-
+        features = np.zeros((len(self.visual_data),8,512,1,1))
+        
         for i in tqdm(range(len(self.visual_data)-8)):
-            features[i] = features_extractor(
-                self.visual_data[i:i+T_obs]).detach().numpy()
-
-        # np.save('features_resnet.npy',features)
+            
+            features[i]=features_extractor(self.visual_data[i:i+T_obs]).detach().numpy()
+            
+        #np.save('features_resnet.npy',features)    
         print("End")
         return torch.from_numpy(features)
+
 
     def __len__(self):
         return self.pos_df.data_id.max()  # data_id maximum dans dataset
@@ -85,20 +88,19 @@ class TrajectoryPredictionDataset(torch.utils.data.Dataset):
         for i in start_frames:
             img = self.visual_data[i:i+T_obs]
             extracted_frames.append(img)
-            if self.return_features is not None:
+            if self.return_features:
                 extracted_features.append(self.features[i])
 
         # stack concatenates a sequence of tensors along a new dimension.
         frames = torch.stack(extracted_frames)
-        features_out = torch.stack(extracted_features)
+        
 
         start_frames = torch.tensor(start_frames)  # tensor([start_frames])
-
+        
         if self.return_features:
-
+            features_out = torch.stack(extracted_features)
             if self.return_image:
-                # Ou on peut return les frames aussi mais dataset plus lourd
-                return obs, pred, frames, features_out, start_frames
+                return obs, pred, frames, features_out, start_frames #Ou on peut return les frames aussi mais dataset plus lourd
             else:
                 return obs, pred, features_out, start_frames
         else:
