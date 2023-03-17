@@ -68,4 +68,4 @@ class Seq2Seq(nn.Module):
         trg_mask = torch.tril(torch.ones((trg_len, trg_len))).expand(
             batch_size, 1, trg_len, trg_len
         )
-        return trg_mask.to(device)
+        return trg_mask.to(self.device)
