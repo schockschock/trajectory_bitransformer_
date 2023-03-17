@@ -71,7 +71,7 @@ class _GestureTransformer(nn.Module):
         self.conv_model = None
         
         if self.conv_name.lower()=="resnet":
-            self.conv_model = Resnet(pretrained,layers_to_unfreeze,layers_to_delete,in_planes)
+            self.conv_model = Resnet(pretrained,layers_to_unfreeze=2,layers_to_delete=layers_to_delete,in_planes=in_planes)
         else:
             raise NotImplementedError("The model {} is not supported!".format(self.conv_name))
         self.conv_model.to(device)
