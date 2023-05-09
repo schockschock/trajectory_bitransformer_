@@ -1,13 +1,13 @@
 # trajectory*bitransformer*
 
-This is the code of our approach for trajectory prediction using transformer. Our work is described here **link to paper**
+This is the code of our approach for trajectory prediction using transformer. Our work is described here in a pdf report that we can easily share if you want.
 
 ## Requirements
 
 - Pytorch
 - Pandas
 - Numpy
-  > Our docker image can be find here
+
 
 ## Data setup
 
